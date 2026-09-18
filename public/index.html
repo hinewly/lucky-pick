@@ -30,6 +30,53 @@
     <p class="tagline">用你的星座、幸运数字、梦境，生成属于你的号码</p>
   </header>
 
+  
+  <!-- ========== 使用指引 ========== -->
+  <details class="card guide-card" id="how-to-use">
+    <summary>
+      <span class="num">📖</span>
+      <span><b>这是干嘛的？怎么用？</b></span>
+      <span class="hint">点击展开/收起</span>
+    </summary>
+    <div class="guide-content">
+      <p>这是个<b>帮你选彩票号码</b>的小工具。你可以把"你觉得幸运的东西"加进来，它会按这些偏好帮你出一组号码。</p>
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <b>加因素</b>（可选）<br />
+          下面那一排按钮，每个代表一种"幸运偏好"——<br />
+          · 🍀 幸运数字：手动输入你喜欢的数字<br />
+          · ♈ 星座：你星座的经典幸运数字<br />
+          · 📅 日期 / 生日：生日数字<br />
+          · 💭 梦境：你昨晚梦到的东西<br />
+          <span class="muted">不加也行，不加就是纯随机。</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <b>点"生成我的幸运号码"</b><br />
+          你加的因素越多，号码越"像你的"。每次生成都会洗牌，结果不同。
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <b>看结果，自己去买</b><br />
+          号码仅供参考。<b>游戏是随机的，玩个开心就好，别当真。</b>
+        </div>
+      </div>
+
+      <p class="muted small">
+        💡 因素会被自动记住，下次打开还在。<br />
+        💡 想要更"准"？把所有你喜欢的因素都加上，越多越像你。
+      </p>
+    </div>
+  </details>
+
   <!-- ========== Tabs ========== -->
   <div class="tabs">
     <button class="tab active" data-game="dlt">大乐透</button>
@@ -71,15 +118,68 @@
     <div id="results"></div>
   </section>
 
-  <!-- ========== 历史频率 ========== -->
+  <!-- ========== 最近开奖 ========== -->
   <section class="card">
     <h2>
       <span class="num">3</span>
-      <span>历史冷热</span>
-      <span class="hint">基于最近 50 期</span>
+      <span>最近开奖</span>
+      <span class="hint">点 tab 切换彩种</span>
     </h2>
     <div id="freq"></div>
   </section>
+
+  <!-- ========== PWA 装机指引 ========== -->
+  <details class="card pwa-card">
+    <summary>
+      <span class="num">📱</span>
+      <span><b>怎么装到手机桌面？</b></span>
+      <span class="hint">点击展开</span>
+      <button class="cache-btn" id="clear-cache-btn" type="button">🧹 清缓存</button>
+    </summary>
+    <div class="guide-content">
+      <p>这其实是个<b>网页应用</b>，但可以像 App 一样装到桌面用：</p>
+
+      <div class="step">
+        <div class="step-num">🍎</div>
+        <div class="step-body">
+          <b>iPhone / iPad（Safari）</b><br />
+          1. 点底部的<b>分享按钮</b>（方框带向上箭头）<br />
+          2. 选<b>"添加到主屏幕"</b><br />
+          3. 名字随便改 → 点"添加"<br />
+          4. 桌面会出现 LuckyPick 图标
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">🤖</div>
+        <div class="step-body">
+          <b>安卓（Chrome）</b><br />
+          1. 点右上角<b>三个点菜单</b><br />
+          2. 选<b>"添加到主屏幕"</b>或"安装应用"<br />
+          3. 确认 → 桌面会出现图标
+        </div>
+      </div>
+
+      <p class="muted small">
+        💡 装好后<b>没网也能用</b>，号码生成不依赖网络。<br />
+        💡 装好后<b>没有浏览器地址栏</b>，体验像原生 App。
+      </p>
+    </div>
+  </details>
+
+  
+
+<!-- ========== 调试信息（开发模式可见） ========== -->
+<details class="card debug-card" id="debug-info">
+  <summary>
+    <span class="num">🔧</span>
+    <span><b>系统状态（调试用）</b></span>
+    <span class="hint">点击展开</span>
+  </summary>
+  <div class="debug-content" id="debug-content">
+    <div>加载中...</div>
+  </div>
+</details>
 
   <!-- ========== 免责声明 ========== -->
   <p class="disclaimer">
@@ -96,21 +196,34 @@
 
 <!-- ========== Scripts ========== -->
 <!-- 数据：通过 script src 注入全局变量（file:// 下也可用）-->
-<script src="../data/dlt.js"></script>
-<script src="../data/qxc.js"></script>
+<script src="data/dlt.js"></script>
+<script src="data/qxc.js"></script>
 
 <!-- 引擎 + 主程序 -->
 <script src="js/engine.js"></script>
 <script src="js/app.js"></script>
 
-<!-- Service Worker（PWA 离线支持）-->
+<!-- Service Worker 仅在生产环境（https）注册，避免开发时缓存干扰 -->
 <script>
-  if ('serviceWorker' in navigator) {
+  // 判断是否本地开发环境
+  const isLocalDev = location.hostname === 'localhost'
+                  || location.hostname === '127.0.0.1'
+                  || location.protocol === 'file:';
+
+  if (!isLocalDev && 'serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('service-worker.js')
         .then(reg => console.log('[LuckyPick] SW registered:', reg.scope))
         .catch(err => console.warn('[LuckyPick] SW failed:', err));
     });
+  } else {
+    console.log('[LuckyPick] 开发模式，Service Worker 未注册');
+    // 开发模式下，主动注销任何已注册的 SW（防止旧缓存干扰）
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(regs => {
+        regs.forEach(r => r.unregister());
+      });
+    }
   }
 </script>
 

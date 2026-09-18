@@ -6,7 +6,7 @@
  * - 运行时：所有 GET 请求加入
  */
 
-const CACHE_NAME = 'lucky-pick-v1';
+const CACHE_NAME = 'lucky-pick-v3';
 const PRECACHE_URLS = [
   './',
   'index.html',
@@ -15,8 +15,8 @@ const PRECACHE_URLS = [
   'js/app.js',
   'manifest.json',
   'icons/icon.svg',
-  '../data/dlt.js',
-  '../data/qxc.js',
+  'data/dlt.js',
+  'data/qxc.js',
 ];
 
 self.addEventListener('install', (event) => {
@@ -37,20 +37,39 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
+
+  const url = new URL(event.request.url);
+  const isHTML = event.request.mode === 'navigate'
+              || event.request.destination === 'document'
+              || (event.request.headers.get('accept') || '').includes('text/html');
+
+  // HTML 走 network-first（保证最新）
+  if (isHTML) {
+    event.respondWith(
+      fetch(event.request, { cache: 'no-store' })
+        .then(response => {
+          if (response && response.status === 200) {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then(c => c.put(event.request, clone));
+          }
+          return response;
+        })
+        .catch(() => caches.match('./index.html'))
+    );
+    return;
+  }
+
+  // 其他静态资源走 cache-first（保留 PWA 离线优势）
   event.respondWith(
     caches.match(event.request).then(cached => {
       if (cached) return cached;
       return fetch(event.request).then(response => {
-        // 缓存成功的 GET 响应
         if (response && response.status === 200) {
-          const responseClone = response.clone();
-          caches.open(CACHE_NAME).then(cache => {
-            cache.put(event.request, responseClone);
-          });
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then(c => c.put(event.request, clone));
         }
         return response;
       }).catch(() => {
-        // 离线 + 无缓存 → 返回主页（让 PWA 仍可用）
         if (event.request.mode === 'navigate') {
           return caches.match('./index.html');
         }

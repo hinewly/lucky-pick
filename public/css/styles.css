@@ -582,6 +582,78 @@ header.hero .tagline {
   color: var(--text-soft);
 }
 
+
+/* ========== 使用指引 / PWA 卡片 ========== */
+.guide-card, .pwa-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.guide-card summary, .pwa-card summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--text);
+  user-select: none;
+}
+
+.guide-card summary::-webkit-details-marker,
+.pwa-card summary::-webkit-details-marker {
+  display: none;
+}
+
+.guide-card[open] summary, .pwa-card[open] summary {
+  border-bottom: 1px solid var(--line);
+  background: var(--bg-deep);
+}
+
+.guide-content {
+  padding: 16px 20px;
+  font-size: 13px;
+  color: var(--text-soft);
+  line-height: 1.7;
+}
+
+.guide-content p {
+  margin: 0 0 12px;
+}
+
+.guide-content .small {
+  font-size: 12px;
+  margin-top: 12px;
+}
+
+.step {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  align-items: flex-start;
+}
+
+.step-num {
+  flex: 0 0 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+  font-weight: 700;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.step-body {
+  flex: 1;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.6;
+}
+
 /* ========== 免责声明 ========== */
 .disclaimer {
   font-size: 11px;
@@ -645,6 +717,141 @@ header.hero .tagline {
 }
 
 .fade-in { animation: fadeIn 0.3s ease; }
+
+
+/* ========== 清缓存按钮 ========== */
+.cache-btn {
+  margin-left: auto;
+  padding: 4px 10px;
+  background: var(--bg-deep);
+  color: var(--text-soft);
+  border: 0;
+  border-radius: 100px;
+  cursor: pointer;
+  font-size: 11px;
+  font-family: inherit;
+}
+
+.cache-btn:hover {
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+}
+
+
+/* ========== 历史冷热 - 最近开奖 ========== */
+.recent-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-soft);
+  margin: 16px 0 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.recent-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.recent-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  border: 1px solid var(--line);
+}
+
+.recent-issue {
+  flex: 0 0 70px;
+  font-weight: 600;
+  color: var(--accent-deep);
+  font-variant-numeric: tabular-nums;
+}
+
+.recent-date {
+  flex: 0 0 90px;
+  font-size: 12px;
+}
+
+.recent-balls {
+  flex: 1;
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.mini-ball {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.mini-ball.front {
+  background: var(--ball-front);
+  color: var(--ball-front-c);
+}
+
+.mini-ball.back {
+  background: var(--ball-back);
+  color: var(--ball-back-c);
+}
+
+.mini-ball.qxc {
+  background: var(--ball-qxc);
+  color: var(--ball-qxc-c);
+}
+
+.mini-ball.divider {
+  background: transparent;
+  color: var(--muted);
+  width: auto;
+  font-size: 12px;
+}
+
+
+/* ========== 调试区块 ========== */
+.debug-card {
+  background: var(--bg-deep);
+  font-family: ui-monospace, "SF Mono", "Menlo", "Consolas", monospace;
+}
+
+.debug-content {
+  padding: 12px 16px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-soft);
+}
+
+.debug-content .row {
+  padding: 2px 0;
+  display: flex;
+  gap: 8px;
+}
+
+.debug-content .key {
+  color: var(--muted);
+  flex: 0 0 120px;
+}
+
+.debug-content .val {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.debug-content .val.ok { color: var(--success); }
+.debug-content .val.bad { color: var(--accent-deep); }
 
 /* ========== 工具类 ========== */
 .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }

@@ -1,11 +1,5 @@
 # 依赖
 node_modules/
-.pnpm-store/
-
-# 构建产物
-dist/
-*.min.js
-*.min.css
 
 # 系统文件
 .DS_Store
@@ -15,24 +9,19 @@ Thumbs.db
 .vscode/
 .idea/
 *.swp
-*.swo
-*~
 
 # 日志
 *.log
-npm-debug.log*
-yarn-debug.log*
 
 # 环境
 .env
 .env.local
-.env.*.local
 
 # 临时文件
 tmp/
 temp/
-.cache/
 
-# 数据备份（不提交，保持原项目唯一性）
-practice/.send_state.json.bak
-analysis/summary.json.bak
+# 部署相关
+.vercel/
+.netlify/
+.wrangler/

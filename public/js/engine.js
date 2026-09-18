@@ -527,21 +527,43 @@
   // ============================================================
   // 九、历史频率统计（用于 UI 展示）
   // ============================================================
-  function summarizeDLTT(history) {
-    const f = freqDLT(history);
-    const frontPairs = [];
-    const backPairs = [];
-    for (let n = 1; n <= 35; n++) frontPairs.push({ n, count: f.front[n] });
-    for (let n = 1; n <= 12; n++) backPairs.push({ n, count: f.back[n] });
-    frontPairs.sort((a, b) => b.count - a.count);
-    backPairs.sort((a, b) => b.count - a.count);
-    return {
-      hotFront: frontPairs.slice(0, 6),
-      coldFront: frontPairs.slice(-6).reverse(),
-      hotBack: backPairs.slice(0, 4),
-      coldBack: backPairs.slice(-4).reverse(),
-    };
+  function summarizeFreq(history, game) {
+    if (game === 'dlt') {
+      const f = freqDLT(history);
+      const frontPairs = [];
+      const backPairs = [];
+      for (let n = 1; n <= 35; n++) frontPairs.push({ n, count: f.front[n] });
+      for (let n = 1; n <= 12; n++) backPairs.push({ n, count: f.back[n] });
+      frontPairs.sort((a, b) => b.count - a.count);
+      backPairs.sort((a, b) => b.count - a.count);
+      return {
+        hotFront: frontPairs.slice(0, 6),
+        coldFront: frontPairs.slice(-6).reverse(),
+        hotBack: backPairs.slice(0, 4),
+        coldBack: backPairs.slice(-4).reverse(),
+      };
+    } else if (game === 'qxc') {
+      const f = freqQXC(history, history);
+      const posFreqs = [];
+      for (let p = 0; p < 7; p++) {
+        const pairs = [];
+        for (const v of Object.keys(f.pos[p])) {
+          pairs.push({ n: Number(v), count: f.pos[p][v] });
+        }
+        pairs.sort((a, b) => b.count - a.count);
+        posFreqs.push({
+          top: pairs.slice(0, 3),
+          bottom: pairs.slice(-3).reverse(),
+        });
+      }
+      return {
+        posFreqs,
+      };
+    }
+    return {};
   }
+  // 向后兼容
+  const summarizeDLTT = (history) => summarizeFreq(history, 'dlt');
 
   // ============================================================
   // 十、暴露 API

@@ -35,9 +35,15 @@
     // 优先用全局变量（data/*.js 注入），其次 fetch
     if (global.DLT && global.DLT.draws && Array.isArray(global.DLT.draws)) {
       state.history.dlt = normalizeDlt(global.DLT.draws);
+      console.log('[LuckyPick] DLT 数据加载:', state.history.dlt.length, '期');
+    } else {
+      console.warn('[LuckyPick] DLT 数据未加载，window.DLT =', typeof global.DLT);
     }
     if (global.QXC && global.QXC.draws && Array.isArray(global.QXC.draws)) {
       state.history.qxc = normalizeQxc(global.QXC.draws);
+      console.log('[LuckyPick] QXC 数据加载:', state.history.qxc.length, '期');
+    } else {
+      console.warn('[LuckyPick] QXC 数据未加载，window.QXC =', typeof global.QXC);
     }
   }
 
@@ -217,21 +223,44 @@
     const game = state.game;
     const history = state.history[game];
     if (history.length === 0) {
-      container.appendChild(el('div', { class: 'muted', text: '暂无历史数据' }));
+      container.appendChild(el('div', { class: 'muted center', text: '暂无历史数据' }));
       return;
     }
 
-    const summary = Engine.summarizeDLTT(history);
-    container.appendChild(el('div', { class: 'freq-grid' }, [
-      el('div', { class: 'freq-cell' }, [
-        el('div', { class: 'label', text: '前区热门号' }),
-        el('div', { class: 'nums', text: summary.hotFront.map(x => String(x.n).padStart(2, '0')).join(' ') }),
-      ]),
-      el('div', { class: 'freq-cell' }, [
-        el('div', { class: 'label', text: '前区冷门号' }),
-        el('div', { class: 'nums', text: summary.coldFront.map(x => String(x.n).padStart(2, '0')).join(' ') }),
-      ]),
-    ]));
+    // 直接展示最近 10 期开奖，让用户清楚看到这是真实数据
+    const recent = history.slice(-10).reverse();
+    const recentList = el('div', { class: 'recent-list' });
+
+    recent.forEach(draw => {
+      let line;
+      if (draw.front && draw.back) {
+        // 大乐透：前区 5 + 后区 2
+        line = el('div', { class: 'recent-item' }, [
+          el('span', { class: 'recent-issue', text: draw.issue + '期' }),
+          el('div', { class: 'recent-balls' }, [
+            ...draw.front.map(n => el('span', { class: 'mini-ball front', text: String(n).padStart(2, '0') })),
+            el('span', { class: 'mini-ball divider', text: '|' }),
+            ...draw.back.map(n => el('span', { class: 'mini-ball back', text: String(n).padStart(2, '0') })),
+          ]),
+        ]);
+      } else if (draw.nums) {
+        // 七星彩：7 位
+        line = el('div', { class: 'recent-item' }, [
+          el('span', { class: 'recent-issue', text: draw.issue + '期' }),
+          el('div', { class: 'recent-balls' },
+            draw.nums.map(n => el('span', { class: 'mini-ball qxc', text: String(n) }))
+          ),
+        ]);
+      }
+      if (line) recentList.appendChild(line);
+    });
+    container.appendChild(recentList);
+
+    // 数据状态说明
+    const totalIssue = history.length;
+    const lastIssue = history[history.length - 1];
+    const meta = el('div', { class: 'meta-note muted', text: '共 ' + totalIssue + ' 期数据 · 截止 ' + lastIssue.issue + '期' });
+    container.appendChild(meta);
   }
 
   // ============================================================
@@ -426,6 +455,12 @@
     renderFactors();
     renderResults();
     renderFreq();
+    updateDebugInfo();
+
+    // tab 切换也更新调试
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => updateDebugInfo());
+    });
 
     console.log('[LuckyPick] 初始化完成', {
       dlt: state.history.dlt.length + '期',
@@ -433,6 +468,33 @@
       factors: state.factors.length + '个',
       engine: Engine.meta,
     });
+  }
+
+  function updateDebugInfo() {
+    const container = $('debug-content');
+    if (!container) return;
+
+    const dltOk = state.history.dlt.length > 0;
+    const qxcOk = state.history.qxc.length > 0;
+
+    const sample = state.history[state.game].slice(-1)[0];
+
+    container.innerHTML = '';
+
+    function row(key, val, cls) {
+      const k = el('span', { class: 'key', text: key });
+      const v = el('span', { class: 'val' + (cls ? ' ' + cls : ''), text: val });
+      container.appendChild(el('div', { class: 'row' }, [k, v]));
+    }
+
+    row('大乐透数据', dltOk ? state.history.dlt.length + ' 期 ✓' : '0 期 ✗', dltOk ? 'ok' : 'bad');
+    row('七星彩数据', qxcOk ? state.history.qxc.length + ' 期 ✓' : '0 期 ✗', qxcOk ? 'ok' : 'bad');
+    row('当前彩种', state.game);
+    row('因素数量', state.factors.length);
+    row('最近一期', sample ? sample.issue + ' (' + sample.date + ')' : '无');
+    row('数据来源', 'data/' + state.game + '.js');
+    row('localStorage', state.factors.length > 0 ? '已用' : '空');
+    row('刷新页面', '请按 Cmd+Shift+R');
   }
 
   // 启动
