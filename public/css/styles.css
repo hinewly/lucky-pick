@@ -1,0 +1,655 @@
+/**
+ * styles.css - LuckyPick 样式（柔和中性风格）
+ *
+ * 设计原则：
+ *   - 暖色基调（赤陶/橙珊瑚），不用冷色不用黑白灰
+ *   - 柔和圆角 + 浅阴影，避免生硬
+ *   - 宽松间距，呼吸感
+ *   - 移动优先（手机友好）
+ *   - 不要玄学感太重（避免"算命"刻板印象）
+ */
+
+:root {
+  /* 颜色 */
+  --bg:           #FAF8F5;   /* 暖白底 */
+  --bg-deep:      #F5F1EB;
+  --card:         #FFFFFF;
+  --text:         #2D2A26;   /* 深棕灰，比纯黑柔和 */
+  --text-soft:    #6B6660;
+  --muted:        #9B958C;
+  --line:         #ECE9DD;
+
+  /* 主色（赤陶色系） */
+  --accent:       #D97757;
+  --accent-soft:  #FBE8DE;
+  --accent-deep:  #B85F42;
+
+  /* 球色 */
+  --ball-front:   #E8F0FF;
+  --ball-front-c: #185FA5;
+  --ball-back:    #FBE8DE;
+  --ball-back-c:  #B85F42;
+  --ball-qxc:     #F0EBE3;
+  --ball-qxc-c:   #2D2A26;
+
+  /* 状态色 */
+  --success:      #5A8A6E;
+  --success-soft: #E8F0E8;
+  --warn:         #C8845F;
+
+  /* 形状 */
+  --radius-sm: 8px;
+  --radius:    12px;
+  --radius-lg: 16px;
+
+  /* 阴影 */
+  --shadow-sm: 0 1px 3px rgba(45, 42, 38, 0.04), 0 1px 2px rgba(45, 42, 38, 0.06);
+  --shadow:    0 4px 12px rgba(45, 42, 38, 0.06), 0 2px 4px rgba(45, 42, 38, 0.04);
+  --shadow-lg: 0 10px 24px rgba(45, 42, 38, 0.08);
+
+  /* 字体 */
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC",
+          "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ========== 布局 ========== */
+.app {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 20px 16px 80px;
+}
+
+header.hero {
+  padding: 24px 0 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+header.hero h1 {
+  font-size: 26px;
+  font-weight: 600;
+  margin: 0 0 6px;
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+header.hero h1 .logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+header.hero .tagline {
+  color: var(--text-soft);
+  font-size: 13px;
+  margin: 0;
+}
+
+/* ========== Tabs ========== */
+.tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 20px;
+  padding: 4px;
+  background: var(--bg-deep);
+  border-radius: var(--radius);
+}
+
+.tab {
+  flex: 1;
+  padding: 10px 14px;
+  border: 0;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-soft);
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.tab.active {
+  background: var(--card);
+  color: var(--accent);
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+}
+
+.tab:hover:not(.active) {
+  color: var(--text);
+}
+
+/* ========== 卡片 ========== */
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--line);
+}
+
+.card h2 {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 14px;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card h2 .num {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card h2 .hint {
+  font-weight: 400;
+  color: var(--muted);
+  font-size: 12px;
+  margin-left: auto;
+}
+
+/* ========== 因素列表 ========== */
+.factor-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+  min-height: 40px;
+  align-items: center;
+}
+
+.factor-list:empty::before {
+  content: '点击下方按钮添加你的幸运因素';
+  color: var(--muted);
+  font-size: 13px;
+  font-style: italic;
+}
+
+.factor-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 500;
+  animation: chipIn 0.3s ease;
+}
+
+.factor-chip.avoid {
+  background: var(--bg-deep);
+  color: var(--text-soft);
+}
+
+.factor-chip .icon {
+  font-size: 14px;
+}
+
+.factor-chip .remove {
+  background: transparent;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  opacity: 0.6;
+  margin-left: 2px;
+}
+
+.factor-chip .remove:hover {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.06);
+}
+
+@keyframes chipIn {
+  from { opacity: 0; transform: scale(0.85); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ========== 添加因素按钮组 ========== */
+.factor-add {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--line);
+}
+
+.add-btn {
+  padding: 6px 12px;
+  background: var(--bg-deep);
+  color: var(--text-soft);
+  border: 0;
+  border-radius: 100px;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: inherit;
+  transition: all 0.15s ease;
+}
+
+.add-btn:hover {
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+}
+
+/* ========== 号码输入 ========== */
+.numbers-input {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.numbers-input input {
+  flex: 1;
+  min-width: 140px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-family: inherit;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.numbers-input input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--card);
+}
+
+.numbers-input button {
+  padding: 8px 14px;
+  background: var(--accent);
+  color: white;
+  border: 0;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+}
+
+.numbers-input button:hover {
+  background: var(--accent-deep);
+}
+
+/* ========== 弹出面板（添加因素） ========== */
+.modal-mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(45, 42, 38, 0.4);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  backdrop-filter: blur(2px);
+}
+
+.modal-mask.show {
+  display: flex;
+}
+
+.modal {
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  max-width: 400px;
+  width: calc(100% - 32px);
+  box-shadow: var(--shadow-lg);
+  animation: modalIn 0.25s ease;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.95) translateY(8px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modal h3 {
+  margin: 0 0 16px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.modal label {
+  display: block;
+  font-size: 12px;
+  color: var(--text-soft);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.modal input, .modal select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-family: inherit;
+  margin-bottom: 14px;
+}
+
+.modal input:focus, .modal select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.modal .actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.modal .actions button {
+  padding: 9px 18px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+}
+
+.modal .actions .cancel {
+  background: var(--bg-deep);
+  color: var(--text-soft);
+}
+
+.modal .actions .ok {
+  background: var(--accent);
+  color: white;
+}
+
+/* ========== 权重滑块 ========== */
+.weight-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+}
+
+.weight-row label {
+  flex: 0 0 90px;
+  font-size: 13px;
+  color: var(--text-soft);
+  font-weight: 500;
+}
+
+.weight-row input[type=range] {
+  flex: 1;
+  -webkit-appearance: none;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--line);
+  outline: none;
+}
+
+.weight-row input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  border: 2px solid var(--card);
+  box-shadow: var(--shadow-sm);
+}
+
+.weight-row input[type=range]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  border: 2px solid var(--card);
+  box-shadow: var(--shadow-sm);
+}
+
+.weight-row .val {
+  flex: 0 0 36px;
+  text-align: right;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* ========== 大按钮 ========== */
+.btn-primary {
+  width: 100%;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+  color: white;
+  border: 0;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: inherit;
+  box-shadow: 0 4px 12px rgba(217, 119, 87, 0.3);
+  transition: transform 0.1s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(217, 119, 87, 0.4);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* ========== 号码展示 ========== */
+.balls {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.ball {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  background: var(--ball-qxc);
+  color: var(--ball-qxc-c);
+  transition: transform 0.3s ease;
+}
+
+.ball.front {
+  background: var(--ball-front);
+  color: var(--ball-front-c);
+}
+
+.ball.back {
+  background: var(--ball-back);
+  color: var(--ball-back-c);
+}
+
+.ball.divider {
+  background: transparent;
+  color: var(--muted);
+  width: auto;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+/* ========== 生成结果卡片 ========== */
+.result-card {
+  background: linear-gradient(135deg, var(--bg-deep) 0%, var(--card) 100%);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px;
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.result-card .scheme-tag {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  font-size: 11px;
+  padding: 3px 10px;
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+  border-radius: 100px;
+  font-weight: 500;
+}
+
+.result-card .meta {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+/* ========== 历史频率展示 ========== */
+.freq-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+}
+
+.freq-cell {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  background: var(--bg);
+}
+
+.freq-cell .label {
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.freq-cell .nums {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent-deep);
+  font-variant-numeric: tabular-nums;
+}
+
+.freq-cell.cold .nums {
+  color: var(--text-soft);
+}
+
+/* ========== 免责声明 ========== */
+.disclaimer {
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 32px;
+  padding: 16px;
+  border-top: 1px solid var(--line);
+  line-height: 1.6;
+}
+
+/* ========== 转盘 ========== */
+.wheel-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px 0;
+}
+
+.wheel {
+  width: 240px;
+  height: 240px;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.wheel-canvas {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  box-shadow: var(--shadow-lg);
+  transition: transform 4s cubic-bezier(0.17, 0.67, 0.21, 0.99);
+}
+
+.wheel-pointer {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-top: 20px solid var(--accent-deep);
+  z-index: 2;
+}
+
+/* ========== 响应式 ========== */
+@media (max-width: 480px) {
+  .app { padding: 16px 12px 60px; }
+  .card { padding: 16px; }
+  header.hero h1 { font-size: 22px; }
+  .ball { width: 32px; height: 32px; font-size: 13px; }
+  .freq-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* ========== 动画 ========== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* ========== 工具类 ========== */
+.row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.row.between { justify-content: space-between; }
+.spacer { flex: 1; }
+.hidden { display: none !important; }
+.muted { color: var(--muted); }
+.center { text-align: center; }

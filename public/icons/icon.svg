@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E89274"/>
+      <stop offset="100%" stop-color="#B85F42"/>
+    </linearGradient>
+    <linearGradient id="ball" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#FBE8DE"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 圆角矩形背景 -->
+  <rect x="0" y="0" width="512" height="512" rx="96" ry="96" fill="url(#bg)"/>
+
+  <!-- 三个号码球（呼应"号码生成"概念） -->
+  <g transform="translate(256, 256)">
+    <circle cx="-100" cy="-30" r="68" fill="url(#ball)" stroke="#FFFFFF" stroke-width="4" opacity="0.95"/>
+    <circle cx="0"    cy="-30" r="68" fill="url(#ball)" stroke="#FFFFFF" stroke-width="4" opacity="0.95"/>
+    <circle cx="100"  cy="-30" r="68" fill="url(#ball)" stroke="#FFFFFF" stroke-width="4" opacity="0.95"/>
+
+    <text x="-100" y="-30" text-anchor="middle" dominant-baseline="central"
+          font-family="-apple-system, SF Pro Display, sans-serif"
+          font-size="64" font-weight="700" fill="#B85F42">7</text>
+    <text x="0"    y="-30" text-anchor="middle" dominant-baseline="central"
+          font-family="-apple-system, SF Pro Display, sans-serif"
+          font-size="64" font-weight="700" fill="#185FA5">★</text>
+    <text x="100"  y="-30" text-anchor="middle" dominant-baseline="central"
+          font-family="-apple-system, SF Pro Display, sans-serif"
+          font-size="64" font-weight="700" fill="#B85F42">8</text>
+  </g>
+</svg>

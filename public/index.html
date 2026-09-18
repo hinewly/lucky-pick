@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#D97757" />
+  <meta name="description" content="个人幸运号码生成器，用你的星座、幸运数字、梦境等个人信息生成号码" />
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="icons/icon.svg" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="LuckyPick" />
+
+  <title>LuckyPick · 个人幸运号码</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ========== Header ========== -->
+  <header class="hero">
+    <h1>
+      <span class="logo">L</span>
+      <span>LuckyPick</span>
+    </h1>
+    <p class="tagline">用你的星座、幸运数字、梦境，生成属于你的号码</p>
+  </header>
+
+  <!-- ========== Tabs ========== -->
+  <div class="tabs">
+    <button class="tab active" data-game="dlt">大乐透</button>
+    <button class="tab" data-game="qxc">七星彩</button>
+  </div>
+
+  <!-- ========== 因素库 ========== -->
+  <section class="card">
+    <h2>
+      <span class="num">1</span>
+      <span>添加你的因素</span>
+      <span class="hint">点击下方按钮添加，可加多个</span>
+    </h2>
+    <div id="factor-list" class="factor-list"></div>
+    <div class="factor-add">
+      <button class="add-btn" data-add-factor="lucky">🍀 幸运数字</button>
+      <button class="add-btn" data-add-factor="avoid">🚫 排除数字</button>
+      <button class="add-btn" data-add-factor="date">📅 日期 / 生日</button>
+      <button class="add-btn" data-add-factor="zodiac">♈ 星座</button>
+      <button class="add-btn" data-add-factor="dream">💭 梦境</button>
+      <button class="add-btn" data-add-factor="lifepath">🔢 数字命理</button>
+    </div>
+  </section>
+
+  <!-- ========== 生成按钮 ========== -->
+  <section class="card">
+    <button class="btn-primary" id="btn-generate">
+      🎯 生成我的幸运号码
+    </button>
+  </section>
+
+  <!-- ========== 结果 ========== -->
+  <section class="card" id="results-card">
+    <h2>
+      <span class="num">2</span>
+      <span>本期号码</span>
+      <span class="hint">基于你添加的因素生成</span>
+    </h2>
+    <div id="results"></div>
+  </section>
+
+  <!-- ========== 历史频率 ========== -->
+  <section class="card">
+    <h2>
+      <span class="num">3</span>
+      <span>历史冷热</span>
+      <span class="hint">基于最近 50 期</span>
+    </h2>
+    <div id="freq"></div>
+  </section>
+
+  <!-- ========== 免责声明 ========== -->
+  <p class="disclaimer">
+    本应用仅供个人娱乐，所生成的号码不保证任何中奖概率。<br />
+    彩票是随机的，请理性对待，量力而行。未成年人禁止使用。
+  </p>
+
+</div>
+
+<!-- ========== Modal 弹窗 ========== -->
+<div class="modal-mask" id="modal-mask">
+  <div class="modal" id="modal"></div>
+</div>
+
+<!-- ========== Scripts ========== -->
+<!-- 数据：通过 script src 注入全局变量（file:// 下也可用）-->
+<script src="../data/dlt.js"></script>
+<script src="../data/qxc.js"></script>
+
+<!-- 引擎 + 主程序 -->
+<script src="js/engine.js"></script>
+<script src="js/app.js"></script>
+
+<!-- Service Worker（PWA 离线支持）-->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(reg => console.log('[LuckyPick] SW registered:', reg.scope))
+        .catch(err => console.warn('[LuckyPick] SW failed:', err));
+    });
+  }
+</script>
+
+</body>
+</html>
