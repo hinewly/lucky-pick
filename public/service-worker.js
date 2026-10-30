@@ -6,7 +6,7 @@
  * - 运行时：所有 GET 请求加入
  */
 
-const CACHE_NAME = 'lucky-pick-v3';
+const CACHE_NAME = 'lucky-pick-v4';
 const PRECACHE_URLS = [
   './',
   'index.html',
